@@ -23,5 +23,9 @@ spring:
 
 mybatis-plus:
   type-aliases-package: com.wry.foodie.pojo
-#  mapper-locations: classpath*:/mapper/*.xml
+  mapper-locations: classpath*:/mapper/*.xml
 
+logging:
+  level:
+    com.wry.foodie.mapper: debug
+    root: info

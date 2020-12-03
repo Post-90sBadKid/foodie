@@ -12,4 +12,6 @@ import com.wry.foodie.pojo.Users;
  * @since 2020/11/15
  */
 public interface UsersMapper extends BaseMapper<Users> {
+
+
 }

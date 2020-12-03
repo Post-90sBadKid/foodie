@@ -1,7 +1,6 @@
 package com.wry.foodie.api;
 
 import com.wry.foodie.pojo.Category;
-import com.wry.foodie.service.impl.TestService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,16 +29,5 @@ import javax.annotation.Resource;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FoodieApiApplication.class)
 public class TestApplication {
-    @Resource
-    private TestService testService;
-
-    @Test
-    public void t1(){
-        Category category=new Category();
-        category.setName("test1");
-        category.setType(1);
-        category.setFatherId(1);
-
-        testService.saveObj(category);
-    }
+   
 }

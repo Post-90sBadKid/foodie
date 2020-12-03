@@ -1,5 +1,8 @@
 package com.wry.foodie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wry.foodie.pojo.vo.CategoryVo;
+import com.wry.foodie.pojo.vo.NewItemsVo;
 import com.wry.foodie.service.CategoryService;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,10 @@ import com.wry.foodie.pojo.Category;
 import com.wry.foodie.mapper.CategoryMapper;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,33 +32,23 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Resource
     private CategoryMapper categoryMapper;
 
-
-
-    @Transactional(propagation = Propagation.NEVER,rollbackFor = Exception.class)
-    public void saveObjChild(Category record) {
-        saveObjChild1(record);
-        int a = 1 / 0;
-        saveObjChild2(record);
+    @Override
+    public List<Category> queryAllRootLevelCat() {
+        QueryWrapper<Category> wrapper = new QueryWrapper<>();
+        wrapper.eq("type", 1);
+        wrapper.orderByAsc("id");
+        return categoryMapper.selectList(wrapper);
     }
 
-    public Category saveObjParent(Category record) {
-        record.setSlogan("parent1");
-        record.setName("parent1");
-        categoryMapper.insert(record);
-        return record;
+    @Override
+    public List<CategoryVo> queryCatList(Integer rootCatId) {
+        return categoryMapper.getSubCatList(rootCatId);
     }
 
-    public Category saveObjChild1(Category record) {
-        record.setSlogan("Child1");
-        record.setName("Child1");
-        categoryMapper.insert(record);
-        return record;
-    }
-
-    public Category saveObjChild2(Category record) {
-        record.setSlogan("Child2");
-        record.setName("Child2");
-        categoryMapper.insert(record);
-        return record;
+    @Override
+    public List<NewItemsVo> querySixNewItemsLazy(Integer rootCatId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("rootCatId",rootCatId);
+        return categoryMapper.getSixNewItemsLazy(map);
     }
 }

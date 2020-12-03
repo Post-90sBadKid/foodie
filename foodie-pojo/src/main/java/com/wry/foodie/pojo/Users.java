@@ -22,7 +22,7 @@ public class Users {
     /**
      * 主键id 用户id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.INPUT)
     @ApiModelProperty(value = "主键id 用户id")
     private String id;
 
