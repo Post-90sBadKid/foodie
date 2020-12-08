@@ -2,7 +2,7 @@ package com.wry.foodie.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wry.foodie.pojo.vo.CategoryVo;
-import com.wry.foodie.pojo.vo.NewItemsVo;
+import com.wry.foodie.pojo.vo.NewItemsVO;
 import com.wry.foodie.service.CategoryService;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +11,6 @@ import javax.annotation.Resource;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wry.foodie.pojo.Category;
 import com.wry.foodie.mapper.CategoryMapper;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +44,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    public List<NewItemsVo> querySixNewItemsLazy(Integer rootCatId) {
+    public List<NewItemsVO> querySixNewItemsLazy(Integer rootCatId) {
         Map<String, Object> map = new HashMap<>();
         map.put("rootCatId",rootCatId);
         return categoryMapper.getSixNewItemsLazy(map);

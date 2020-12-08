@@ -38,16 +38,16 @@
                f.type,
                f.father_id AS fatherId,
                c.id        AS subId,
-               c.id        AS subName,
-               c.id        AS subType,
-               c.id        AS subFatherId
+               c.name      AS subName,
+               c.type      AS subType,
+               c.father_id AS subFatherId
         from category AS f
                      left join category AS c ON f.id = c.father_id
         where f.father_id = #{rootCatId,jdbcType=INTEGER}
     </select>
 
 
-    <resultMap id="myNewItemsVoMap" type="com.wry.foodie.pojo.vo.NewItemsVo">
+    <resultMap id="myNewItemsVoMap" type="com.wry.foodie.pojo.vo.NewItemsVO">
         <result column="rootCatId" jdbcType="INTEGER" property="rootCatId"/>
         <result column="rootCatName" jdbcType="VARCHAR" property="rootCatName"/>
         <result column="slogan" jdbcType="VARCHAR" property="slogan"/>
@@ -63,9 +63,8 @@
 
 
     <select id="getSixNewItemsLazy" resultMap="myNewItemsVoMap" parameterType="map">
-        SELECT
-                f.id AS   rootCatId,
-                f.`name` AS rootCatName,
+        SELECT f.id AS rootCatId,
+               f.`name` AS rootCatName,
                 f.slogan AS slogan,
                 f.cat_image AS catImage,
                 f.bg_color AS bgColor,
@@ -75,11 +74,12 @@
                 i.created_time AS createdTime
         FROM
                 category AS f
-                        LEFT JOIN items AS i ON f.id=i.root_cat_id
-                        LEFT JOIN items_img AS ii ON i.id =ii.item_id AND ii.is_main=1
+                LEFT JOIN items AS i
+        ON f.id=i.root_cat_id
+                LEFT JOIN items_img AS ii ON i.id =ii.item_id AND ii.is_main=1
         WHERE f.type=1
           AND root_cat_id=#{paramsMap.rootCatId,jdbcType=INTEGER}
         ORDER BY i.created_time DESC
-        LIMIT 0,7
+                LIMIT 0, 7
     </select>
 </mapper>

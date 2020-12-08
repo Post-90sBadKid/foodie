@@ -3,7 +3,7 @@ package com.wry.foodie.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wry.foodie.pojo.Category;
 import com.wry.foodie.pojo.vo.CategoryVo;
-import com.wry.foodie.pojo.vo.NewItemsVo;
+import com.wry.foodie.pojo.vo.NewItemsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,5 +21,5 @@ public interface CategoryMapper extends BaseMapper<Category> {
 
     List<CategoryVo> getSubCatList(Integer rootCatId);
 
-    List<NewItemsVo> getSixNewItemsLazy(@Param("paramsMap") Map<String, Object> paramsMap);
+    List<NewItemsVO> getSixNewItemsLazy(@Param("paramsMap") Map<String, Object> paramsMap);
 }

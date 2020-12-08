@@ -3,7 +3,7 @@ package com.wry.foodie.service;
 import com.wry.foodie.pojo.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wry.foodie.pojo.vo.CategoryVo;
-import com.wry.foodie.pojo.vo.NewItemsVo;
+import com.wry.foodie.pojo.vo.NewItemsVO;
 
 import java.util.List;
 
@@ -39,6 +39,6 @@ public interface CategoryService extends IService<Category> {
      * @param rootCatId 父Id
      * @return
      */
-    List<NewItemsVo> querySixNewItemsLazy(Integer rootCatId);
+    List<NewItemsVO> querySixNewItemsLazy(Integer rootCatId);
 
 }

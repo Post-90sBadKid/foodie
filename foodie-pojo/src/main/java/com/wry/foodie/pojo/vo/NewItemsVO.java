@@ -11,7 +11,7 @@ import java.util.List;
  * @author wangruiyu
  * @since 2020/12/2
  */
-public class NewItemsVo {
+public class NewItemsVO {
     private Integer rootCatId;
     private String rootCatName;
     private String slogan;
