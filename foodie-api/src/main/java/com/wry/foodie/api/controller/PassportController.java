@@ -65,7 +65,8 @@ public class PassportController {
         Users user = usersService.createUser(userBo);
         setNullProperty(user);
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(user), true);
-
+        //TODO 生成用户token 存人redis 会话
+        //TODO 同步购物车数据
         return Result.ok(user);
     }
 
@@ -82,6 +83,8 @@ public class PassportController {
         }
         setNullProperty(user);
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(user), true);
+        //TODO 生成用户token 存人redis 会话
+        //TODO 同步购物车数据
         return Result.ok(user);
     }
 

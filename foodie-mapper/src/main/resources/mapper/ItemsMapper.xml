@@ -43,4 +43,24 @@
                 ) AS t ON t.item_id = i.id
                 ${ew.customSqlSegment}
     </select>
+    <resultMap id="queryItemsBySpecIdsResultMap" type="com.wry.foodie.pojo.vo.ShopcartVO">
+        <result column="itemId" jdbcType="VARCHAR" property="itemId"/>
+        <result column="itemImgUrl" jdbcType="VARCHAR" property="itemImgUrl"/>
+        <result column="specId" jdbcType="VARCHAR" property="specId"/>
+        <result column="specName" jdbcType="VARCHAR" property="specName"/>
+        <result column="priceDiscount" jdbcType="VARCHAR" property="priceDiscount"/>
+        <result column="priceNormal" jdbcType="VARCHAR" property="priceNormal"/>
+    </resultMap>
+    <select id="queryItemsBySpecIds" resultMap="queryItemsBySpecIdsResultMap">
+        SELECT i.id             AS itemId,
+               ii.url           AS itemImgUrl,
+               s.id             AS specId,
+               s.name           AS specName,
+               s.price_discount AS priceDiscount,
+               s.price_normal   AS priceNormal
+        FROM items_spec AS s
+                     LEFT JOIN items_img AS ii  ON ii.item_id = s.item_id AND ii.is_main = 1
+                     LEFT JOIN items AS i ON i.id = s.item_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

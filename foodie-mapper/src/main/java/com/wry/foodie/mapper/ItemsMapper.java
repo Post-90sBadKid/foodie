@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.wry.foodie.pojo.Items;
 import com.wry.foodie.pojo.vo.SearchItemsVO;
+import com.wry.foodie.pojo.vo.ShopcartVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -21,4 +24,5 @@ public interface ItemsMapper extends BaseMapper<Items> {
 
     IPage<SearchItemsVO> searchItems(IPage<SearchItemsVO> page, @Param(Constants.WRAPPER) Wrapper<SearchItemsVO> queryWrapper);
 
+   List<ShopcartVO> queryItemsBySpecIds(@Param(Constants.WRAPPER) Wrapper<ShopcartVO> queryWrapper);
 }

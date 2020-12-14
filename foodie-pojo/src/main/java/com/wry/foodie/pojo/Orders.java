@@ -22,7 +22,7 @@ public class Orders {
     /**
      * 订单主键 同时也是订单编号
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.INPUT)
     @ApiModelProperty(value = "订单主键 同时也是订单编号")
     private String id;
 

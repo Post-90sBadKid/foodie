@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wry.foodie.common.result.PagedGridResult;
 import com.wry.foodie.pojo.vo.SearchItemsVO;
+import com.wry.foodie.pojo.vo.ShopcartVO;
 import com.wry.foodie.service.ItemsService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,7 @@ import com.wry.foodie.pojo.Items;
 import com.wry.foodie.mapper.ItemsMapper;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -71,5 +73,12 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
         pagedGridResult.setRecords(voiPage.getTotal());
         pagedGridResult.setRows(voiPage.getRecords());
         return pagedGridResult;
+    }
+
+    @Override
+    public List<ShopcartVO> queryItemsBySpecIds(List<String> specIdList) {
+        QueryWrapper<ShopcartVO> wrapper = new QueryWrapper<>();
+        wrapper.in("s.id",specIdList);
+        return itemsMapper.queryItemsBySpecIds(wrapper);
     }
 }

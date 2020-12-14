@@ -1,5 +1,6 @@
 package com.wry.foodie.api.controller;
 
+import cn.hutool.core.collection.ListUtil;
 import com.wry.foodie.common.result.PagedGridResult;
 import com.wry.foodie.common.result.Result;
 import com.wry.foodie.pojo.Items;
@@ -8,6 +9,7 @@ import com.wry.foodie.pojo.ItemsParam;
 import com.wry.foodie.pojo.ItemsSpec;
 import com.wry.foodie.pojo.vo.CommentCountsLevelVO;
 import com.wry.foodie.pojo.vo.ItemInfoVO;
+import com.wry.foodie.pojo.vo.ShopcartVO;
 import com.wry.foodie.service.*;
 import io.swagger.annotations.*;
 import io.swagger.models.auth.In;
@@ -20,6 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.StringJoiner;
 
 
 /**
@@ -96,9 +99,9 @@ public class ItemsController {
     })
     @GetMapping("/search")
     public Result search(@RequestParam @NotNull String keywords,
-                          @RequestParam  String sort,
-                          @RequestParam @NotNull Integer page,
-                          @RequestParam @NotNull Integer pageSize
+                         @RequestParam String sort,
+                         @RequestParam @NotNull Integer page,
+                         @RequestParam @NotNull Integer pageSize
     ) {
         PagedGridResult pagedGridResult = itemsService.searchItems(keywords, sort, page, pageSize);
         return Result.ok(pagedGridResult);
@@ -113,11 +116,22 @@ public class ItemsController {
     })
     @GetMapping("/catItems")
     public Result searchCatId(@RequestParam @NotNull Integer catId,
-                         @RequestParam  String sort,
-                         @RequestParam @NotNull Integer page,
-                         @RequestParam @NotNull Integer pageSize
+                              @RequestParam String sort,
+                              @RequestParam @NotNull Integer page,
+                              @RequestParam @NotNull Integer pageSize
     ) {
         PagedGridResult pagedGridResult = itemsService.searchItemsByCatId(catId, sort, page, pageSize);
         return Result.ok(pagedGridResult);
+    }
+
+    @ApiOperation(value = "查询购物车商品最新价格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "itemSpecIds", value = "商品规格Id", defaultValue = "1", required = true),
+    })
+    @GetMapping("/refresh")
+    public Result refresh(@RequestParam @NotNull String itemSpecIds) {
+        List<String> specIdList = ListUtil.toLinkedList(itemSpecIds.split(","));
+        List<ShopcartVO> list = itemsService.queryItemsBySpecIds(specIdList);
+        return Result.ok(list);
     }
 }
