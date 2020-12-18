@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wry.foodie.common.result.PagedGridResult;
+import com.wry.foodie.mapper.ItemsSpecMapper;
 import com.wry.foodie.pojo.vo.SearchItemsVO;
 import com.wry.foodie.pojo.vo.ShopcartVO;
 import com.wry.foodie.service.ItemsService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wry.foodie.pojo.Items;
 import com.wry.foodie.mapper.ItemsMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +30,9 @@ import java.util.List;
 public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements ItemsService {
     @Resource
     private ItemsMapper itemsMapper;
+
+    @Resource
+    private ItemsSpecMapper itemsSpecMapper;
 
     @Override
     public Items queryItemById(String itemId) {
@@ -78,7 +84,19 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
     @Override
     public List<ShopcartVO> queryItemsBySpecIds(List<String> specIdList) {
         QueryWrapper<ShopcartVO> wrapper = new QueryWrapper<>();
-        wrapper.in("s.id",specIdList);
+        wrapper.in("s.id", specIdList);
         return itemsMapper.queryItemsBySpecIds(wrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public void decreaseItemSpecStock(String spedId, Integer buyCounts) {
+        // synchronized 不推荐使用，集群下无作业，性能低
+        // 数据库锁： 不推荐，导致数据库性能降低
+        // 分布式锁 Zookeeper,Redis
+        int i = itemsSpecMapper.decreaseItemSpecStock(spedId, buyCounts);
+        if (i < 1){
+            throw  new RuntimeException("订单创建失败，原因：库存不足。");
+        }
     }
 }

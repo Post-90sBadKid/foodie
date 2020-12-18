@@ -25,7 +25,7 @@ public class OrderStatus {
     /**
      * 订单ID 对应订单表的主键id
      */
-    @TableId(value = "order_id", type = IdType.AUTO)
+    @TableId(value = "order_id", type = IdType.INPUT)
     @ApiModelProperty(value = "订单ID 对应订单表的主键id")
     private String orderId;
 

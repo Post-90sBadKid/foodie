@@ -54,7 +54,7 @@ public class ItemsController {
     @GetMapping("/info/{itemId}")
     public Result info(@PathVariable @NotNull String itemId) {
         Items item = itemsService.queryItemById(itemId);
-        List<ItemsImg> itemsImgList = itemsImgService.queryItenImgList(itemId);
+        List<ItemsImg> itemsImgList = itemsImgService.queryItemImgList(itemId);
         ItemsParam itemsParam = itemsParamService.queryItemsParamById(itemId);
         List<ItemsSpec> itemsSpecList = itemsSpecService.queryItemSpecList(itemId);
         ItemInfoVO itemInfoVO = new ItemInfoVO();

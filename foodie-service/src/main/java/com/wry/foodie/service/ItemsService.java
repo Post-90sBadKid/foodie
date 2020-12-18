@@ -3,7 +3,6 @@ package com.wry.foodie.service;
 import com.wry.foodie.common.result.PagedGridResult;
 import com.wry.foodie.pojo.Items;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wry.foodie.pojo.vo.SearchItemsVO;
 import com.wry.foodie.pojo.vo.ShopcartVO;
 
 import java.util.List;
@@ -51,4 +50,11 @@ public interface ItemsService extends IService<Items> {
      * @return
      */
     List<ShopcartVO> queryItemsBySpecIds(List<String> specIdList);
+
+    /**
+     * 减少商品的库存
+     * @param spedId
+     * @param buyCounts
+     */
+    void  decreaseItemSpecStock(String spedId,Integer buyCounts);
 }
