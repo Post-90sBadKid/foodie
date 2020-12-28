@@ -68,12 +68,12 @@ public class Result<T> {
         return new Result<>(200, "", data);
     }
 
-    public static Result ok(String message) {
-        return new Result(200, message, null);
+    public static <T> Result ok(T data,String message) {
+        return new Result<>(200, message, data);
     }
 
-    public static <T> Result error(T data) {
-        return new Result<>(500, "error", data);
+    public static Result okMsg(String message) {
+        return new Result(200, message, null);
     }
 
     public static <T> Result error(String message, T data) {

@@ -41,18 +41,18 @@ public class GlobalExceptionHandler {
         return Result.errorException(e.getMessage(), e);
     }
 
-//    /**
-//     * 服务异常
-//     *
-//     * @param request
-//     * @param e
-//     * @return
-//     */
-//    @ExceptionHandler({Exception.class})
-//    public Result handleBusinessException(HttpServletRequest request, Exception e) {
-//        log.error("execute method exception error.url is {}", request.getRequestURI(), e);
-//        return Result.failure(e.getStatus(), e.getMessage());
-//    }
+    /**
+     * 服务异常
+     *
+     * @param request
+     * @param e
+     * @return
+     */
+    @ExceptionHandler({Exception.class})
+    public Result handleBusinessException(HttpServletRequest request, Exception e) {
+        log.error("execute method exception error.url is {}", request.getRequestURI(), e);
+        return Result.error(e.getMessage());
+    }
 
     /**
      * 参数校验异常

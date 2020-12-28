@@ -1,11 +1,14 @@
 package com.wry.foodie.service.impl;
 
+import com.wry.foodie.common.constant.Constant;
 import com.wry.foodie.common.enums.OrderStatusEnum;
 import com.wry.foodie.common.enums.YesOrNoEnum;
 import com.wry.foodie.common.util.IdUtil;
 import com.wry.foodie.mapper.*;
 import com.wry.foodie.pojo.*;
 import com.wry.foodie.pojo.bo.SubmitOrderBO;
+import com.wry.foodie.pojo.vo.MerchantOrdersVO;
+import com.wry.foodie.pojo.vo.OrdersVO;
 import com.wry.foodie.service.ItemsImgService;
 import com.wry.foodie.service.ItemsService;
 import com.wry.foodie.service.OrdersService;
@@ -47,7 +50,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void createOrder(SubmitOrderBO submitOrderBO) {
+    public OrdersVO createOrder(SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -111,12 +114,12 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
             orderItemsMapper.insert(orderItem);
 
             //2.4 减库存
-            itemsService.decreaseItemSpecStock(itemsSpec.getId(),buyCounts);
+            itemsService.decreaseItemSpecStock(itemsSpec.getId(), buyCounts);
         }
         orders.setTotalAmount(totalAmount);
         orders.setRealPayAmount(realPayAmount);
         ordersMapper.insert(orders);
-        //2.3.保存订单状态表
+        //3.保存订单状态表
         OrderStatus waitPayOrderStatus = new OrderStatus();
         waitPayOrderStatus.setOrderId(orderId);
         waitPayOrderStatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
@@ -127,5 +130,33 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         waitPayOrderStatus.setCloseTime(new Date());
         waitPayOrderStatus.setCommentTime(new Date());
         orderStatusMapper.insert(waitPayOrderStatus);
+
+        //4.构建商户订单传递支付中心
+        MerchantOrdersVO merchantOrdersVO=new MerchantOrdersVO();
+        merchantOrdersVO.setMerchantOrderId(orderId);
+        merchantOrdersVO.setMerchantUserId(userId);
+        merchantOrdersVO.setAmount(realPayAmount+postAmount);
+        merchantOrdersVO.setPayMethod(payMethod);
+        merchantOrdersVO.setReturnUrl(Constant.RETURN_URL);
+
+        OrdersVO ordersVO = new OrdersVO();
+        ordersVO.setMerchantOrdersVO(merchantOrdersVO);
+        ordersVO.setOrderId(orderId);
+        return ordersVO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateOrderStatus(String orderId, Integer status) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus.setOrderStatus(status);
+        orderStatus.setPayTime(new Date());
+        orderStatusMapper.updateById(orderStatus);
+    }
+
+    @Override
+    public OrderStatus queryOrderStatusInfo(String orderId) {
+        return orderStatusMapper.selectById(orderId);
     }
 }

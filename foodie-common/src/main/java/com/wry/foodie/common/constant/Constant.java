@@ -10,4 +10,6 @@ package com.wry.foodie.common.constant;
  */
 public class Constant {
     public final static String FOODIE_SHOPCART = "shopcart";
+    public final static String RETURN_URL = "http://localhost:8088/orders/notifyMerchantOrderPaid";
+    public final static String PAYMENT_URL = "http://localhost:8089/payment/createMerchantOrder";
 }
